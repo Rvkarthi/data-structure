@@ -38,6 +38,7 @@ void display()
 
 void main()
 {
+    printf("this is linear probing");
     insert(11);
     insert(12);
     insert(14);
