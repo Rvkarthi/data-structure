@@ -1,3 +1,5 @@
+//this is bubble sort
+
 #include<stdio.h>
 int count = 0;
 void bubble_sort(int arr[],int n)
