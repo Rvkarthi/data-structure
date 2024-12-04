@@ -1,26 +1,27 @@
-#include<string.h>
-#include<ctype.h>
+#include <string.h>
+#include <ctype.h>
 #include <stdio.h>
 #define capacity 5
 int arr[capacity];
-int top=-1;
+int top = -1;
 
-int isfull(){
-    if(top==capacity-1)
+int isfull()
+{
+    if (top == capacity - 1)
         return 1;
     return 0;
 }
 
 int isempty()
 {
-    if(top==-1)
+    if (top == -1)
         return 1;
     return 0;
 }
 
 void push(int element)
 {
-    if(isfull())
+    if (isfull())
         printf("\nstack is overflow\n");
     else
     {
@@ -31,60 +32,56 @@ void push(int element)
 
 int pop()
 {
-    if(isempty())
+    if (isempty())
         printf("\nstack is underflow\n");
     else
     {
         top--;
-        return arr[top+1];
+        return arr[top + 1];
     }
 }
 
 void display()
 {
-    for(int i=0;i<top+1;i++)
+    for (int i = 0; i < top + 1; i++)
     {
         printf(" %d ", arr[i]);
     }
 }
 
+int main()
+{
 
+    char str[] = "231*+9-"; // here write ur expression
 
-int main() {
-    
-    char str[] = "231*+9-"; //here write ur expression
-    
-    for(int i = 0;i<strlen(str);i++)
+    for (int i = 0; i < strlen(str); i++)
     {
-        if(isdigit(str[i]))
+        if (isdigit(str[i]))
         {
-            push(str[i]-'0');
+            push(str[i] - '0');
         }
         else
         {
-            switch(str[i])
+            switch (str[i])
             {
-                case '+':
-                push(pop()+pop());
+            case '+':
+                push(pop() + pop());
                 break;
-                
-                case '-':
-                push(pop()-pop());
+
+            case '-':
+                push(pop() - pop());
                 break;
-                
-                case '*':
-                push(pop()*pop());
+
+            case '*':
+                push(pop() * pop());
                 break;
-                
-                case '/':
-                push(pop()/pop());
+
+            case '/':
+                push(pop() / pop());
                 break;
             }
-            
         }
     }
-    
+
     printf("\nevaluated value is %d ", pop());
-    
-    
 }
