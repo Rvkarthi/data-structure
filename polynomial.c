@@ -1,16 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Define the Node structure for a polynomial
-typedef struct Node {
-    int coeff;        // Coefficient of the term
-    int pow;          // Power of the term
-    struct Node* next; // Pointer to the next term
-} Node;
+// Define the node structure for a polynomial
+struct node {
+    int coeff;         // Coefficient of the term
+    int pow;           // Power of the term
+    struct node* next; // Pointer to the next term
+};
 
 // Function to create a new node
-Node* CreateNode(int coeff, int pow) {
-    Node* newNode = (Node*)malloc(sizeof(Node));
+struct node* createNode(int coeff, int pow) {
+    struct node* newNode = (struct node*)malloc(sizeof(struct node));
     newNode->coeff = coeff;
     newNode->pow = pow;
     newNode->next = NULL;
@@ -18,19 +18,19 @@ Node* CreateNode(int coeff, int pow) {
 }
 
 // Function to add two polynomials
-void AddPoly(Node* poly1, Node* poly2, Node** poly) {
-    while (poly1 != NULL || poly2 != NULL) {
-        if (poly1 != NULL && (poly2 == NULL || poly1->pow > poly2->pow)) {
-            *poly = CreateNode(poly1->coeff, poly1->pow);
+void addPoly(struct node* poly1, struct node* poly2, struct node** poly) {
+    while (poly1 != NULL && poly2 != NULL) {
+        if (poly1->pow > poly2->pow) {
+            *poly = createNode(poly1->coeff, poly1->pow);
             poly1 = poly1->next;
-        } else if (poly2 != NULL && (poly1 == NULL || poly2->pow > poly1->pow)) {
-            *poly = CreateNode(poly2->coeff, poly2->pow);
+        } else if (poly2->pow > poly1->pow) {
+            *poly = createNode(poly2->coeff, poly2->pow);
             poly2 = poly2->next;
         } else {
             // Both powers are equal
             int sumCoeff = poly1->coeff + poly2->coeff;
             if (sumCoeff != 0) {
-                *poly = CreateNode(sumCoeff, poly1->pow);
+                *poly = createNode(sumCoeff, poly1->pow);
             }
             poly1 = poly1->next;
             poly2 = poly2->next;
@@ -39,10 +39,24 @@ void AddPoly(Node* poly1, Node* poly2, Node** poly) {
             poly = &((*poly)->next);
         }
     }
+
+    // Add remaining terms of poly1, if any
+    while (poly1 != NULL) {
+        *poly = createNode(poly1->coeff, poly1->pow);
+        poly1 = poly1->next;
+        poly = &((*poly)->next);
+    }
+
+    // Add remaining terms of poly2, if any
+    while (poly2 != NULL) {
+        *poly = createNode(poly2->coeff, poly2->pow);
+        poly2 = poly2->next;
+        poly = &((*poly)->next);
+    }
 }
 
 // Function to display a polynomial
-void DisplayPoly(Node* poly) {
+void displayPoly(struct node* poly) {
     while (poly != NULL) {
         printf("%d*x^%d", poly->coeff, poly->pow);
         poly = poly->next;
@@ -56,28 +70,28 @@ void DisplayPoly(Node* poly) {
 // Main function
 int main() {
     // Creating first polynomial: 3x^3 + 5x^2 + 6
-    Node* poly1 = CreateNode(3, 3);
-    poly1->next = CreateNode(5, 2);
-    poly1->next->next = CreateNode(6, 0);
+    struct node* poly1 = createNode(3, 3);
+    poly1->next = createNode(5, 2);
+    poly1->next->next = createNode(6, 0);
 
     // Creating second polynomial: 4x^2 + 2x + 1
-    Node* poly2 = CreateNode(4, 2);
-    poly2->next = CreateNode(2, 1);
-    poly2->next->next = CreateNode(1, 0);
+    struct node* poly2 = createNode(4, 2);
+    poly2->next = createNode(2, 1);
+    poly2->next->next = createNode(1, 0);
 
     // Adding the two polynomials
-    Node* poly = NULL;
-    AddPoly(poly1, poly2, &poly);
+    struct node* poly = NULL;
+    addPoly(poly1, poly2, &poly);
 
     // Displaying the polynomials
     printf("First Polynomial: ");
-    DisplayPoly(poly1);
+    displayPoly(poly1);
 
     printf("Second Polynomial: ");
-    DisplayPoly(poly2);
+    displayPoly(poly2);
 
     printf("Resultant Polynomial: ");
-    DisplayPoly(poly);
+    displayPoly(poly);
 
     return 0;
 }
